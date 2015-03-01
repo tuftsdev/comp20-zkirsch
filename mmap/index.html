@@ -5,20 +5,20 @@
     <title>The Real Maurader's Map</title>
     <meta charset="utf-8" />
     <script type="text/javascript"
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdZkLXJoKnjv7-UHRHIxgIk_XuUalwPHw&amp;sensor=true">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdZkLXJoKnjv7-UHRHIxgIk_XuUalwPHw&amp;sensor=true">
     </script>
     <script type="text/javascript">
-    
-      var my_login = "PatIsdale"
-      
+
+      var my_login = "PatIsdale";
+
       // default location (in case geolocation doesn't work)
-      my_lat = 38.878659;
-      my_lng = -76.981679;
+      var my_lat = 38.878659;
+      var my_lng = -76.981679;
 
       var map;
       var marker;
       var info_window = new google.maps.InfoWindow();
-      
+
       var people;
 
       function initialize() {
@@ -48,7 +48,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://secret-about-box.herokuapp.com/sendLocation', true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.send("login=" + my_login + "&lat=" + my_lat + "&lng=" + my_lng);
+        xhr.send("login = " + my_login + "&lat = " + my_lat + "&lng = " + my_lng);
         
         xhr.onload = function () {
           people = JSON.parse(this.responseText);
@@ -67,14 +67,17 @@
           position: latlng,
           title: person.name
         });
-        if (person.login == my_login) // make the user's marker different
-          marker.setIcon("green_marker.png");
+        if (person.login  =  =  my_login) 
+          marker.setIcon("green_marker.png"); // make the user's marker different
 
         person.dist_from_user = lat_lng_distance(my_lat, my_lng, person.lat, person.lng);
         
         google.maps.event.addListener(marker, 'click', function() {
           info_window.close();
-          info_window.setContent(person.login + " (" + person.dist_from_user + " miles away)");
+          if (person.login  =  =  my_login)
+            info_window.setContent(person.login);
+          else 
+            info_window.setContent(person.login + " (" + person.dist_from_user + " miles away)");
           info_window.open(map, this);
         });
       }
