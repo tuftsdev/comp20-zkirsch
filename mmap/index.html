@@ -30,9 +30,9 @@
           navigator.geolocation.getCurrentPosition(function(position) {
             my_lat = position.coords.latitude;
             my_lng = position.coords.longitude;
-            }, showError);
             console.log(my_lat + " " + my_lng);
             get_all_locations(); // will get locations and render map   
+            }, showError);   
         }
         else {
           alert("Geolocation is not supported by your web browser.  What a shame!");
