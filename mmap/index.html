@@ -22,8 +22,9 @@
 
       function initialize() {
         var mapOptions = {
+          center: {lat: my_lat, lng: my_lng},
           mapTypeId: google.maps.MapTypeId.ROADMAP,
-          zoom: 10
+          zoom: 15
         };
         map = new google.maps.Map(document.getElementById('map-canvas'),
           mapOptions);
@@ -108,7 +109,7 @@
         // convert from kilometers to miles
         d = d / 1.60934;
 
-        return d;
+        return Math.round(d); // round to nearest integer
 
       }
       Number.prototype.toRad = function() {
