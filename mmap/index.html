@@ -9,8 +9,8 @@
     <script type="text/javascript">
     
       var my_login = "PatIsdale"
-      var my_lat = 50;
-      var my_lng = 50;
+      var my_lat = 0;
+      var my_lng = 0;
 
       var map;
       var marker;
@@ -25,21 +25,19 @@
         };
         map = new google.maps.Map(document.getElementById('map-canvas'),
           mapOptions);
-        get_my_location();
-        get_all_locations();
-      }
-      function get_my_location() {
-        // get my location
+        
         if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
           navigator.geolocation.getCurrentPosition(function(position) {
             my_lat = position.coords.latitude;
             my_lng = position.coords.longitude;
-            }, showError);      
+            }, showError);
+
+            get_all_locations(); // will get locations and render map   
         }
         else {
           alert("Geolocation is not supported by your web browser.  What a shame!");
         }
-            
+
       }
 
       function showError(error) {
