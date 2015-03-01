@@ -9,8 +9,10 @@
     <script type="text/javascript">
     
       var my_login = "PatIsdale"
-      var my_lat = 0;
-      var my_lng = 0;
+      
+      // default location (in case geolocation doesn't work)
+      var my_lat = 38.878659;
+      var my_lng = -76.981679;
 
       var map;
       var marker;
@@ -21,40 +23,23 @@
       function initialize() {
         var mapOptions = {
           mapTypeId: google.maps.MapTypeId.ROADMAP,
-          zoom: 4
+          zoom: 10
         };
         map = new google.maps.Map(document.getElementById('map-canvas'),
           mapOptions);
         
         if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
           navigator.geolocation.getCurrentPosition(function(position) {
-            my_lat = position.coords.latitude;
-            my_lng = position.coords.longitude;
-            get_all_locations(); // will get locations and render map   
-            }, showError);   
+              my_lat = position.coords.latitude;
+              my_lng = position.coords.longitude;
+              get_all_locations(); // will get locations and render map        
+            });   
         }
         else {
           alert("Geolocation is not supported by your web browser.  What a shame!");
         }
         
 
-      }
-
-      function showError(error) {
-        switch(error.code) {
-          case error.PERMISSION_DENIED:
-          alert("User denied the request for Geolocation.");
-          break;
-          case error.POSITION_UNAVAILABLE:
-          alert("Location information is unavailable.");
-          break;
-          case error.TIMEOUT:
-          alert("The request to get user location timed out.");
-          break;
-          case error.UNKNOWN_ERROR:
-          alert("An unknown error occurred.");
-          break;
-        }
       }
 
       function get_all_locations() {
