@@ -7,131 +7,128 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdZkLXJoKnjv7-UHRHIxgIk_XuUalwPHw&amp;sensor=true">
     </script>
     <script type="text/javascript">
-    var my_login = "PatIsdale"
-    var my_lat = 50;
-    var my_lng = 50;
-    var request = new XMLHttpRequest();
-    var me = new google.maps.LatLng(my_lat, my_lng);
-    var myOptions = {
-      zoom: 13, // The larger the zoom number, the bigger the zoom
-      center: me,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map;
-    var marker;
-    var infowindow = new google.maps.InfoWindow();
-    var people;
+    
+      var my_login = "PatIsdale"
+      var my_lat = 50;
+      var my_lng = 50;
 
-    function initialize() {
-      var mapOptions = {
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: me,
-        zoom: 4
-      };
-      map = new google.maps.Map(document.getElementById('map-canvas'),
-        mapOptions);
-      get_my_location();
-      get_all_locations();
-    }
-    function get_my_location() {
-      // get my location
-      if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
-        navigator.geolocation.getCurrentPosition(function(position) {
-          my_lat = position.coords.latitude;
-          my_lng = position.coords.longitude;
-          }, showError);      
+      var map;
+      var marker;
+      var info_window = new google.maps.InfoWindow();
+      
+      var people;
+
+      function initialize() {
+        var mapOptions = {
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          zoom: 4
+        };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
+        get_my_location();
+        get_all_locations();
       }
-      else {
-        alert("Geolocation is not supported by your web browser.  What a shame!");
+      function get_my_location() {
+        // get my location
+        if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+          navigator.geolocation.getCurrentPosition(function(position) {
+            my_lat = position.coords.latitude;
+            my_lng = position.coords.longitude;
+            }, showError);      
+        }
+        else {
+          alert("Geolocation is not supported by your web browser.  What a shame!");
+        }
+            
       }
-          
-    }
 
-    function showError(error) {
-      switch(error.code) {
-        case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.");
-        break;
-        case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.");
-        break;
-        case error.TIMEOUT:
-        alert("The request to get user location timed out.");
-        break;
-        case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.");
-        break;
+      function showError(error) {
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+          case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+          case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+          case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred.");
+          break;
+        }
       }
-    }
 
-    function get_all_locations() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://secret-about-box.herokuapp.com/sendLocation', true);
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.send("login=" + my_login + "&lat=" + my_lat + "&lng=" + my_lng);
-      
-      xhr.onload = function () {
-        people = JSON.parse(this.responseText);
-        render_map();
-      };
-      
-    }
-
-    function render_map() {
-
-      me = new google.maps.LatLng(my_lat, my_lng);
-
-      // Update map and go to user's location...
-      map.panTo(me);
-
-      for (var i = 0; i < people.length; i++) {
-        createMarker(people[i]);
+      function get_all_locations() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://secret-about-box.herokuapp.com/sendLocation', true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("login=" + my_login + "&lat=" + my_lat + "&lng=" + my_lng);
+        
+        xhr.onload = function () {
+          people = JSON.parse(this.responseText);
+          render_map();
+        };
+        
       }
-    }
 
-    function createMarker(person)
-    {
-      var latlng = new google.maps.LatLng(person.lat, person.lng);
-      var marker = new google.maps.Marker({
-        map: map,
-        position: latlng,
-        title: person.name
-      });
+      function render_map() {
 
-      person.dist_from_user = lat_lng_distance(my_lat, my_lng, person.lat, person.lng);
-      
-      google.maps.event.addListener(marker, 'click', function() {
-        infowindow.close();
-        infowindow.setContent(person.login + " (" + person.dist_from_user + " miles away)");
-        infowindow.open(map, this);
-      });
-    }
+        var me = new google.maps.LatLng(my_lat, my_lng);
 
-    // taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
-    function lat_lng_distance(lat1, lng1, lat2, lng2) {
-      
-      var R = 6371; // km 
-      //has a problem with the .toRad() method below.
-      var x1 = lat2-lat1;
-      var dLat = x1.toRad();  
-      var x2 = lng2-lng1;
-      var dLon = x2.toRad();  
-      
-      var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                      Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
-                      Math.sin(dLon/2) * Math.sin(dLon/2);  
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-      var d = R * c; 
+        // Update map and go to user's location...
+        map.panTo(me);
 
-      // convert from kilometers to miles
-      d = d / 1.60934;
+        for (var i = 0; i < people.length; i++) {
+          createMarker(people[i]);
+        }
+      }
 
-      return d;
+      function createMarker(person)
+      {
+        var latlng = new google.maps.LatLng(person.lat, person.lng);
+        var marker = new google.maps.Marker({
+          map: map,
+          position: latlng,
+          title: person.name
+        });
+        if (person.login == my_login)
+          marker.setIcon("green_marker.png");
 
-    }
-    Number.prototype.toRad = function() {
-      return this * Math.PI / 180;
-    }
+        person.dist_from_user = lat_lng_distance(my_lat, my_lng, person.lat, person.lng);
+        
+        google.maps.event.addListener(marker, 'click', function() {
+          info_window.close();
+          info_window.setContent(person.login + " (" + person.dist_from_user + " miles away)");
+          info_window.open(map, this);
+        });
+      }
+
+      // taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
+      function lat_lng_distance(lat1, lng1, lat2, lng2) {
+        
+        var R = 6371; // km 
+        //has a problem with the .toRad() method below.
+        var x1 = lat2-lat1;
+        var dLat = x1.toRad();  
+        var x2 = lng2-lng1;
+        var dLon = x2.toRad();  
+        
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                        Math.sin(dLon/2) * Math.sin(dLon/2);  
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c; 
+
+        // convert from kilometers to miles
+        d = d / 1.60934;
+
+        return d;
+
+      }
+      Number.prototype.toRad = function() {
+        return this * Math.PI / 180;
+      }
 
     </script>
   </head>
