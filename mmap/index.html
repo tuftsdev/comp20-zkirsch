@@ -11,8 +11,8 @@
       var my_login = "PatIsdale"
       
       // default location (in case geolocation doesn't work)
-      var my_lat = 38.878659;
-      var my_lng = -76.981679;
+      my_lat = 38.878659;
+      my_lng = -76.981679;
 
       var map;
       var marker;
@@ -21,20 +21,19 @@
       var people;
 
       function initialize() {
-        var mapOptions = {
-          center: {lat: my_lat, lng: my_lng},
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          zoom: 15
-        };
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-          mapOptions);
-        
         if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
-          navigator.geolocation.getCurrentPosition(function(position) {
-              my_lat = position.coords.latitude;
-              my_lng = position.coords.longitude;
-              get_all_locations(); // will get locations and render map        
-            });   
+          navigator.geolocation.getCurrentPosition(function(position) { // the function runs when user's location is tracked              
+            my_lat = position.coords.latitude;
+            my_lng = position.coords.longitude;
+            var mapOptions = {
+              center: {lat: my_lat, lng: my_lng},
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+              zoom: 15 // pretty zoomed in (can view all of Tufts campus)
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+            get_all_locations(); // will get locations and render map 
+          });   
         }
         else {
           alert("Geolocation is not supported by your web browser.  What a shame!");
@@ -52,22 +51,11 @@
         
         xhr.onload = function () {
           people = JSON.parse(this.responseText);
-          render_map();
+          
+          for (var i = 0; i < people.length; i++) {
+            createMarker(people[i]); // add everyone to the map
+          }
         };
-        
-      }
-
-      function render_map() {
-        
-
-        var me = new google.maps.LatLng(my_lat, my_lng);
-
-        // Update map and go to user's location...
-        map.panTo(me);
-
-        for (var i = 0; i < people.length; i++) {
-          createMarker(people[i]);
-        }
       }
 
       function createMarker(person)
@@ -78,7 +66,7 @@
           position: latlng,
           title: person.name
         });
-        if (person.login == my_login)
+        if (person.login == my_login) // make the user's marker different
           marker.setIcon("green_marker.png");
 
         person.dist_from_user = lat_lng_distance(my_lat, my_lng, person.lat, person.lng);
@@ -91,6 +79,7 @@
       }
 
       // taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
+      // calculates a distance (in miles) given the latitutde & longitude
       function lat_lng_distance(lat1, lng1, lat2, lng2) {
         
         var R = 6371; // km 
