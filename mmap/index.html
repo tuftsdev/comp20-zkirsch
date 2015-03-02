@@ -22,6 +22,7 @@
       var people;
 
       function initialize() {
+        document.getElementById('results').setAttribute('class','hidden');
         var mapOptions = {
           center: {lat: my_lat, lng: my_lng},
           mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -36,6 +37,7 @@
 
             me = new google.maps.LatLng(my_lat, my_lng);
             map.panTo(me);
+            document.getElementById('map-canvas').setAttribute('class','visible');
 
             get_all_locations(); // will get locations and render map 
           });   
@@ -116,7 +118,7 @@
   </head>
 
   <body onload="initialize()">
-      <div id="map-canvas"></div>
+      <div id="map-canvas" class="hidden"></div> <!-- starts out hidden -->
   </body>
 
 </html>
