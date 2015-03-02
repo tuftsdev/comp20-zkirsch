@@ -36,7 +36,6 @@
 
             me = new google.maps.LatLng(my_lat, my_lng);
             map.panTo(me);
-            document.getElementById('map-canvas').classList.remove('hidden');
 
             get_all_locations(); // will get locations and render map 
           });   
@@ -59,6 +58,8 @@
 	 
           for (var i = 0; i < people.length; i++) {
             createMarker(people[i]); // add everyone to the map
+
+	    document.getElementById('map-canvas').classList.remove('hidden');
           }
         };
       }
