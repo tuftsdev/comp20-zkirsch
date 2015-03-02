@@ -22,17 +22,17 @@
       var people;
 
       function initialize() {
+        var mapOptions = {
+          center: {lat: my_lat, lng: my_lng},
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          zoom: 15 // pretty zoomed in (can view all of Tufts campus)
+        };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
         if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
           navigator.geolocation.getCurrentPosition(function(position) { // the function runs when user's location is tracked              
             my_lat = position.coords.latitude;
             my_lng = position.coords.longitude;
-            var mapOptions = {
-              center: {lat: my_lat, lng: my_lng},
-              mapTypeId: google.maps.MapTypeId.ROADMAP,
-              zoom: 15 // pretty zoomed in (can view all of Tufts campus)
-            };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
-              mapOptions);
             get_all_locations(); // will get locations and render map 
           });   
         }
@@ -43,8 +43,7 @@
 
       }
 
-      function get_all_locations() {
-        
+      function get_all_locations() { 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://secret-about-box.herokuapp.com/sendLocation', true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
