@@ -22,7 +22,7 @@
       var people;
 
       function initialize() {
-        document.getElementById('map-canvas').toggleClass('hidden');
+        document.getElementById('map-canvas').classList.add('hidden');
         var mapOptions = {
           center: {lat: my_lat, lng: my_lng},
           mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -37,7 +37,7 @@
 
             me = new google.maps.LatLng(my_lat, my_lng);
             map.panTo(me);
-            document.getElementById('map-canvas').toggleClass('hidden');
+            document.getElementById('map-canvas').classList.remove('hidden');
 
             get_all_locations(); // will get locations and render map 
           });   
