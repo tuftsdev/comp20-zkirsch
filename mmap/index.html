@@ -33,6 +33,10 @@
           navigator.geolocation.getCurrentPosition(function(position) { // the function runs when user's location is tracked              
             my_lat = position.coords.latitude;
             my_lng = position.coords.longitude;
+
+            me = new google.maps.LatLng(my_lat, my_lng);
+            map.panTo(me);
+
             get_all_locations(); // will get locations and render map 
           });   
         }
@@ -51,7 +55,7 @@
         
         xhr.onload = function () {
           people = JSON.parse(this.responseText);
-          
+	 
           for (var i = 0; i < people.length; i++) {
             createMarker(people[i]); // add everyone to the map
           }
