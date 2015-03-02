@@ -74,7 +74,7 @@
         
         google.maps.event.addListener(marker, 'click', function() {
           info_window.close();
-          if (person.login  =  =  my_login)
+          if (person.login == my_login)
             info_window.setContent(person.login);
           else 
             info_window.setContent(person.login + " (" + person.dist_from_user + " miles away)");
