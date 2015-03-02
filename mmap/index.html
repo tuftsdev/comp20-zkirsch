@@ -33,7 +33,9 @@
           navigator.geolocation.getCurrentPosition(function(position) { // the function runs when user's location is tracked              
             my_lat = position.coords.latitude;
             my_lng = position.coords.longitude;
+console.log("about to call get_all_locations()");
             get_all_locations(); // will get locations and render map 
+console.log("just called get_all_locations()");
           });   
         }
         else {
@@ -44,6 +46,7 @@
       }
 
       function get_all_locations() { 
+console.log("within get_all_locations()");
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://secret-about-box.herokuapp.com/sendLocation', true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -56,6 +59,7 @@
             createMarker(people[i]); // add everyone to the map
           }
         };
+console.log("done with get_all_locations()");
       }
 
       function createMarker(person)
