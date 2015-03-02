@@ -58,8 +58,6 @@
 	 
           for (var i = 0; i < people.length; i++) {
             createMarker(people[i]); // add everyone to the map
-
-	    document.getElementById('map-canvas').classList.remove('hidden');
           }
         };
       }
@@ -118,7 +116,7 @@
   </head>
 
   <body onload="initialize()">
-      <div id="map-canvas" class="hidden"></div> <!-- starts off hidden -->
+      <div id="map-canvas"></div>
   </body>
 
 </html>
