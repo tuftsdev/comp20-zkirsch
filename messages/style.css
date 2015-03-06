@@ -11,5 +11,6 @@ h1 {
 
 #messages {
      padding: 2px 7px 2px 7px; */
-     color: navy;
+     color: #003399;
+     font-weight: 500;
 }
