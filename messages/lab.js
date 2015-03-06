@@ -15,6 +15,5 @@ function parse() {
 function parseData() {
     messages = JSON.parse(request.responseText);
     for (var i in messages)
-        for (var j in messages[i]
-            console.log(j + " ")
+        console.log(messages[i].username + ": " + messages[i].content)
 }
