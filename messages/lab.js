@@ -13,7 +13,7 @@ function parse() {
 }
 
 function parseData() {
-    messages = JSON.parse(request.responseText);
-    for (var i in messages)
-        console.log(messages[i].username + ": " + messages[i].content);
+//    messages = JSON.parse(request.responseText);
+//    for (var i in messages)
+//       console.log(messages[i].username + ": " + messages[i].content);
 }
