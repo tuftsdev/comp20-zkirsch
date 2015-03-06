@@ -1,1 +1,21 @@
-/* Your CSS here... */
+body {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+        background-color: #FFFFF0;
+}
+
+h1 {
+     text-align: center;
+     font-size: 200%;
+}
+
+#messages:hover {
+     font-size: 300%;
+}
+
+#messages {
+     padding: 2px 7px 2px 7px;
+     display: inline;
+     background-color: navy;
+     color: white;
+}
