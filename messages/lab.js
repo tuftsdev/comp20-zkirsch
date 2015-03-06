@@ -13,12 +13,10 @@ function parse() {
 }
 
 function parseData() {
-    console.log("parseData is running");
-    var message_data = JSON.parse(request.responseText);
-    for (var i in message_data) {
-        console.log("i = " + i);
-	document.getElementById("messages").innerHTML += "<p>" + message_data[i].username + ": " + message_data[i].content + "</p>\n<br/>\n";
+    if (request.readyState == 4) {
+        var message_data = JSON.parse(request.responseText);
+        for (var i in message_data)
+            document.getElementById("messages").innerHTML += "<p>" + message_data[i].username + ": " + message_data[i].content + "</p>\n<br/>\n";
     }
-    console.log("parseData is ending");
 }
 
