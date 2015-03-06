@@ -9,12 +9,8 @@ h1 {
      font-size: 200%;
 }
 
-#messages:hover {
-     font-size: 300%;
-}
-
 #messages {
-     padding: 2px 7px 2px 7px;
+/*     padding: 2px 7px 2px 7px; */
      background-color: navy;
      color: white;
 }
