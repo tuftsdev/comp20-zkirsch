@@ -8,7 +8,7 @@ Due: 12 March 2015
 2. I have not collaborated with anyone on this assignment, though I did do
     research and emulate code from the Google Maps API and stack overflow
     (which is cited in code's comments).
-3. I spent about 3 hours on this assignment.
+3. I spent about 4 hours on this assignment.
 
 Note: From the last homework, I tried to not commit as much. However, because
       the site cannot be tested locally (because of that limitation of the JS API),
