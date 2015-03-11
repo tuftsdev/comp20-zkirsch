@@ -105,7 +105,7 @@
         // convert from kilometers to miles
         d = d / 1.60934;
 
-        return Math.round(d); // round to nearest integer
+        return d.toFixed(2); // round to nearest integer
 
       }
       Number.prototype.toRad = function() {
