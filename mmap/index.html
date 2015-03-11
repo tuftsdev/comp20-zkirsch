@@ -70,15 +70,16 @@
           position: latlng,
           title: person.name
         });
-        if (person.login == my_login) 
+        if (person.login == my_login)
           marker.setIcon("green_marker.png"); // make the user's marker different
-
+        
         person.dist_from_user = lat_lng_distance(my_lat, my_lng, person.lat, person.lng);
         
         google.maps.event.addListener(marker, 'click', function() {
           info_window.close();
-          if (person.login == my_login)
-            info_window.setContent(person.login);
+          if (person.login == my_login) {
+            info_window.setContent('<div id="me">'+person.login+'</div>');
+          }
           else 
             info_window.setContent(person.login + " (" + person.dist_from_user + " miles away)");
           info_window.open(map, this);
@@ -90,7 +91,6 @@
       function lat_lng_distance(lat1, lng1, lat2, lng2) {
         
         var R = 6371; // km 
-        //has a problem with the .toRad() method below.
         var x1 = lat2-lat1;
         var dLat = x1.toRad();  
         var x2 = lng2-lng1;
