@@ -11,8 +11,8 @@
 		$("#msg").keyup(function(k) {
 			if (k.which == 13) { // enter key is hit
 				current_date = new Date();
-				html_to_add = '<p>' + current_date + ' - ' + $("#msg").val() + '</p>'
-				$("#log").prepend(html_to_add);
+				new_entry = '<p>' + current_date + ' - ' + $("#msg").val() + '</p>'
+				$("#log").prepend(new_entry);
 				localStorage.setItem('current_logs', $("#log").html());
 				$("#msg").val('');
 			}
