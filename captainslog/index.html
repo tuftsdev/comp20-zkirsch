@@ -7,10 +7,13 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script>
 	$("document").ready(function() {
+		$("#log").prepend(localStorage.getItem('current_logs'));
 		$("#msg").keyup(function(k) {
 			if (k.which == 13) { // enter key is hit
 				current_date = new Date();
-				$("#log").append('<p>' + current_date + ' - ' + $("#msg").val() + '</p>');
+				html_to_add = '<p>' + current_date + ' - ' + $("#msg").val() + '</p>'
+				$("#log").prepend(html_to_add);
+				localStorage.setItem('current_logs', $("#log").html());
 				$("#msg").val('');
 			}
 		});
