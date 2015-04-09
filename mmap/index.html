@@ -90,12 +90,12 @@
       // taken from http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript
       // calculates a distance (in miles) given the latitutde & longitude
       function lat_lng_distance(lat1, lng1, lat2, lng2) {
-
-		console.log(typeof lat1);
-		console.log(typeof lat2);
-		console.log(typeof lng1);
-		console.log(typeof lng2);
-        
+       
+		lat1 = parseFloat(lat1);
+		lat2 = parseFloat(lat2);
+		lng1 = parseFloat(lng1);
+		lng2 = parseFloat(lng2);
+ 
         var R = 6371; // km 
         var x1 = lat2-lat1;
         var dLat = x1.toRad();  
