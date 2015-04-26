@@ -1,0 +1,130 @@
+<!DOCTYPE>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Security Assessment</title>
+</head>
+<body>
+<h1>Security Assessment of Maurader's Map Server</h1>
+<p>By Zach Kirsch</p>
+<h2>Introduction</h2>
+<p>This security assessment tested for vulnerabilities in <a href="https://comp20ass03mapserver.herokuapp.com/">this Marauder's Map server</a>. The purpose of the server is to allow anyone to:</p>
+<ul>
+<li>POST a login and a geolocation, which will be stored in a database.</li>
+<li>query a login's most recent geolocation using a GET request.</li>
+<li>view every login's geolocation simultaneously via a GET request.</li>
+</ul>
+<p>This report highlights the largest vulnerabilities of this server and proposes viable solutions to plugging these security holes.
+<p><span class="bold">What counts as a vulnerability?</span> In this assessment, anything that could lead to unintended effects for the server (e.g. excessive storage or crashing) or clients of the server (i.e. security implications for people that use the server or its features) is a vulnerability.</p>
+<h2>Methodology</h2>
+<p>This assessment tested the limits of the server in a multitude of ways.</p>
+<p><span class="bold">First,</span> malicious scripts were sent as logins to attempt <a href="http://en.wikipedia.org/wiki/Cross-site_scripting">Cross Site Scripting</a> (XSS), because any login sent to the server is then listed on the server's root home page.</p>
+<p><span class="bold">Second,</span> requests were sent in high-frequency to test the capacity of the server.</p>
+<p><span class="bold">Third,</span> requests were sent in high-magnitude (about 80,000 character logins) to test if storage constraints were taken into account when storing data.</p>
+<p><span class="bold">Fourth,</span> The content of the requests were altered to check if it is possible to post luring messages to clientele of the server.</p>
+<h2>Abstract of Findings</h2>
+<p>All attempts at XSS failed. All logins were asserted to be alphanumeric, and all longitude and latitude data were asserted to be numeric. While from a security standpoint this was extremely effective preventing XSS attacks, it was, for lack of a better term, overkill. This prevented any logins with first or last names (e.g. John Smith) or hypenated names (e.g. John Stuart-Mill).</p>
+<p>Issues arose when testing the limits of the server. While malicious code could would not be processed by the server, there was no validation of requests' frequency, size, or content, which can cause issues for both the server and the clients who use it.</p>
+<h2>Issues Found</h2>
+<ol>
+<li><p><span class="bold">Frequency of Requests</span></p>
+<ul>
+<li><p>Where: POST method at /sendLocation</p></li>
+<li><p>Severity of issue: High</p></li>
+<li><p>Description of issue: There is no validation of the parameter's size before the login and geolocation are stored in the database. This makes it possible to send extremely large amount of data with relatively little effort, using up excessive space in the database and unnecessarily costing more and more in storage fees.</p></li>
+<li><p>Proof of vulnerability:</p>
+<img src="sending_long.png" alt="curl of sending long POST request">
+<p>The POST request contains an extremely long login (<a href="parameters.txt">here</a> are the parameters that were sent with this request).</p>
+<li><p>Proposed Solution: Add a limit to the size of the parameters:</p>
+<code>
+var MAX_LENGTH = 50;
+<br>
+if (input.login &gt; MAX_LENGTH || input.lat &gt; MAX_LENGTH || input.lng &gt; MAX_LENGTH) {
+<br>
+&nbsp;&nbsp;res.set("Content-Type","text/html");
+<br>
+&nbsp;&nbsp;res.status(400);
+<br>
+&nbsp;&nbsp;res.json({"error":"Whoops, something is wrong with your data!"});
+<br>
+}
+<br>
+else {
+<br>
+&nbsp;&nbsp;...
+<br>
+}
+</code>
+</li>
+</li>
+</ul>
+</li>
+<li><p><span class="bold">Frequency of Requests</span></p>
+<ul>
+<li><p>Where: POST method at /sendLocation</p></li>
+<li><p>Severity of issue: High</p></li>
+<li><p>Description of issue: There is no limit on the number of simulatenous requests that can be directed at the server. With too many requests, however, the server becomes overloaded and crashes. This is clearly a vulnerability, as anyone can easily take down the server.</p></li>
+<li><p>Proof of vulnerability:</p>
+<img src="crashed_site.png" alt="crashed server site">
+<li><p>Proposed Solution: Add a limit to the number of simulataneous requests. This can be achieved by doing some of this nature:</p>
+<code>
+var http = require('http');
+<br>
+var MAX_REQUESTS = 15;
+<br>
+if (http.globalAgent.sockets.size() &gt;= MAX_REQUESTS) {
+<br>
+&nbsp;&nbsp;res.set("Content-Type","text/html");
+<br>
+&nbsp;&nbsp;res.status(400);
+<br>
+&nbsp;&nbsp;res.json({"error":"Whoops, something is wrong with your data!"});
+<br>
+}
+<br>
+else {
+<br>
+&nbsp;&nbsp;...
+<br>
+}
+</code>
+</li>
+</li>
+</ul>
+</li>
+<li><p><span class="bold">Frequency of Requests</span></p>
+<ul>
+<li><p>Where: POST method at /sendLocation</p></li>
+<li><p>Severity of issue: High</p></li>
+<li><p>Description of issue: There is no validation of the parameter's size before the login and geolocation are stored in the database. This makes it possible to send extremely large amount of data with relatively little effort, using up excessive space in the database and unnecessarily costing more and more in storage fees.</p></li>
+<li><p>Proof of vulnerability:</p>
+<img src="phishing_message.png" alt="phishing message sent as login">
+<p>The POST request contains an extremely long login (<a href="parameters.txt">here</a> are the parameters that were sent with this request).</p>
+<li><p>Proposed Solution: Add a limit to the size of the parameters:</p>
+<code>
+var MAX_LENGTH = 50;
+<br>
+if (input.login &gt; MAX_LENGTH || input.lat &gt; MAX_LENGTH || input.lng &gt; MAX_LENGTH) {
+<br>
+&nbsp;&nbsp;res.set("Content-Type","text/html");
+<br>
+&nbsp;&nbsp;res.status(400);
+<br>
+&nbsp;&nbsp;res.json({"error":"Whoops, something is wrong with your data!"});
+<br>
+}
+<br>
+else {
+<br>
+&nbsp;&nbsp;...
+<br>
+}
+</code>
+</li>
+</li>
+</ul>
+</li>
+</ol>
+<h2>Conclusion</h2>
+</body>
+<html>
