@@ -3,7 +3,6 @@ body {
 	background-color: #FFFFF0;
 	text-align: left;
 }
-
 .bold {
         font-weight: bold;
 }
@@ -28,4 +27,13 @@ a:hover {
 }
 a:active {
 	text-decoration: underline;
+}
+
+.block {
+        display: block;
+}
+code {
+        background-color: #f8f8f8;
+        border: solid 1px #dbe7f3;
+        padding: 0 3px;
 }

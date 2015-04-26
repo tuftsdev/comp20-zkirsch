@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <title>Security Assessment</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </head>
 <body>
 <h1>Security Assessment of Maurader's Map Server</h1>
@@ -27,7 +28,7 @@
 <p>Issues arose when testing the limits of the server. While malicious code could would not be processed by the server, there was no validation of requests' frequency, size, or content, which can cause issues for both the server and the clients who use it.</p>
 <h2>Issues Found</h2>
 <ol>
-<li><p><span class="bold">Frequency of Requests</span></p>
+<li><p><span class="bold">Size of Requests</span></p>
 <ul>
 <li><p>Where: POST method at /sendLocation</p></li>
 <li><p>Severity of issue: High</p></li>
@@ -36,7 +37,7 @@
 <img src="sending_long.png" alt="curl of sending long POST request">
 <p>The POST request contains an extremely long login (<a href="parameters.txt">here</a> are the parameters that were sent with this request).</p>
 <li><p>Proposed Solution: Add a limit to the size of the parameters:</p>
-<code>
+<code class="block">
 var MAX_LENGTH = 50;
 <br>
 if (input.login &gt; MAX_LENGTH || input.lat &gt; MAX_LENGTH || input.lng &gt; MAX_LENGTH) {
@@ -67,7 +68,7 @@ else {
 <li><p>Proof of vulnerability:</p>
 <img src="crashed_site.png" alt="crashed server site">
 <li><p>Proposed Solution: Add a limit to the number of simulataneous requests. This can be achieved by doing some of this nature:</p>
-<code>
+<code class="block">
 var http = require('http');
 <br>
 var MAX_REQUESTS = 15;
@@ -92,39 +93,21 @@ else {
 </li>
 </ul>
 </li>
-<li><p><span class="bold">Frequency of Requests</span></p>
+<li><p><span class="bold">Content of Requests</span></p>
 <ul>
 <li><p>Where: POST method at /sendLocation</p></li>
-<li><p>Severity of issue: High</p></li>
-<li><p>Description of issue: There is no validation of the parameter's size before the login and geolocation are stored in the database. This makes it possible to send extremely large amount of data with relatively little effort, using up excessive space in the database and unnecessarily costing more and more in storage fees.</p></li>
+<li><p>Severity of issue: Low</p></li>
+<li><p>Description of issue: These is no validation of the content that somebody sends to the server. This means that anybody can send whatever text they want (phishing attempts, vulgarities, etc.) and it will be automatically displayed on the server. This will harm the credibility of the site (or even worse, if the site has good credibility, it could cause users to believe the messages and take their suggestions). This is one of the dangers of having an open forum.</p>
+<p>This is marked as low severity, because under the current implementation, only letters and numbers can be sent, so it is hard to persuade someone in a phishing scheme credibly without the use of spaces.</li>
 <li><p>Proof of vulnerability:</p>
 <img src="phishing_message.png" alt="phishing message sent as login">
-<p>The POST request contains an extremely long login (<a href="parameters.txt">here</a> are the parameters that were sent with this request).</p>
-<li><p>Proposed Solution: Add a limit to the size of the parameters:</p>
-<code>
-var MAX_LENGTH = 50;
-<br>
-if (input.login &gt; MAX_LENGTH || input.lat &gt; MAX_LENGTH || input.lng &gt; MAX_LENGTH) {
-<br>
-&nbsp;&nbsp;res.set("Content-Type","text/html");
-<br>
-&nbsp;&nbsp;res.status(400);
-<br>
-&nbsp;&nbsp;res.json({"error":"Whoops, something is wrong with your data!"});
-<br>
-}
-<br>
-else {
-<br>
-&nbsp;&nbsp;...
-<br>
-}
-</code>
+<li><p>Proposed Solution: Manually check the content of all requests. This can be done by adding a <code>ready_to_be_displayed</code> parameter to every document in the database (with a default value of <code>false</code>) and manually change the value each document to true once it has been verified to be legitimate.</p>
 </li>
 </li>
 </ul>
 </li>
 </ol>
 <h2>Conclusion</h2>
+<p>Though this site is well protected against XSS, there are a number of other issues that can impede the security and stability of the site. While cost of this assessment (and the neccessary repairs) would normally cost hundreds of dollars, I am willing to offer a Tufts discount of 100% off!</p>
 </body>
 <html>
