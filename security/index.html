@@ -25,7 +25,7 @@
 <p><span class="bold">Fourth,</span> The content of the requests were altered to check if it is possible to post luring messages to clientele of the server.</p>
 <h2>Abstract of Findings</h2>
 <p>All attempts at XSS failed. All logins were asserted to be alphanumeric, and all longitude and latitude data were asserted to be numeric. While from a security standpoint this was extremely effective preventing XSS attacks, it was, for lack of a better term, overkill. This prevented any logins with first or last names (e.g. John Smith) or hypenated names (e.g. John Stuart-Mill).</p>
-<p>Issues arose when testing the limits of the server. While malicious code could would not be processed by the server, there was no validation of requests' frequency, size, or content, which can cause issues for both the server and the clients who use it.</p>
+<p>Issues arose when testing the limits of the server. While malicious code could would not be processed by the server, there was no validation of requests' frequency, size, or content, which can cause issues for both the server and the clients who use it. An excessive frequency of requests caused the server to crash. Excessively large requests can cause the database to fill up very quickly, and possibly lead to storage fees. No validation of content can cause phishing attempts against the site's users, which is a clear security risk.</p>
 <h2>Issues Found</h2>
 <ol>
 <li><p><span class="bold">Size of Requests</span></p>
